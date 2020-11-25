@@ -38,7 +38,7 @@ public class Main {
 	public static void main(String[] args) {
 		Window.runWindow(args);
 		// if (args.length > 0) {
-		// 	String[] ports = SerialPortList.getPortNames("/dev/", Pattern.compile("tty.wchusbserial*"));
+		// 	String[] ports = SerialPortList.getPortNames("/dev/", Pattern.compile("tty.*"));
 		// 	for (String portName : ports) {
 		// 		if (portName.equals(args[0])) {
 		// 			serialPortAdress = args[0];
@@ -92,7 +92,8 @@ public class Main {
 
 	/** Runs when the window loads. */
 	public static void start() {
-
+		String[] ports = SerialPortList.getPortNames("/dev/", Pattern.compile("tty.*"));
+		Window.port.getItems().addAll(ports);
 	}
 
 	public static void onDataSend() {
