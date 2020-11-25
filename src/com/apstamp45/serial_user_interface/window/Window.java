@@ -1,11 +1,13 @@
 package com.apstamp45.serial_user_interface.window;
 
+import com.apstamp45.serial_user_interface.Main;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -22,33 +24,66 @@ import javafx.stage.Stage;
  */
 public class Window extends Application {
 
+    /** Defines the css file for the window. */
+    public final String CSS_FILE = "./style.css";
+
+    /** Defines the default baud rates to chose from. */
+    public final String[] BAUD_RATES = {"110", "300", "1200", "4800", "9600", "14400", 
+        "19200", "38400", "57600", "15200", "128000", "256000"};
+
+    /** Used to select the serial port. */
+    public static ChoiceBox<String> port;
+
+    /** Refreshes the list of available ports. */
+    public static Button refreshButton;
+
+    /** Used to select the baud rate. */
+    public static ChoiceBox<String> baudRate;
+
+    /**
+     * Shows the serial data that was
+     * sent by the serial device.
+     */
+    public static TextArea serialIn;
+
+    /** Used to send data to the serial device. */
+    public static TextField serialOut;
+
+    /**
+     * Sends the data in serialOut to the
+     * serial device.
+     * @see serialOut
+     */
+    public static Button send;
+
     /** Opens a window. */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
         //Top HBox
-        MenuButton port = new MenuButton("Select Port");
-        Button refreshButton = new Button("Refresh");
-        Region spacer1 = new Region();
-        HBox.setHgrow(spacer1, Priority.ALWAYS);
-        Label portLabel = new Label("LABEL");
-        Region spacer2 = new Region();
-        HBox.setHgrow(spacer2, Priority.ALWAYS);
-        MenuButton baudRate = new MenuButton("Select Baud");
-        HBox topHbox = new HBox(port, refreshButton, 
-            spacer1, portLabel, spacer2, baudRate);
+        Label selectPortLabel = new Label("Select Port:");
+        port = new ChoiceBox<>();
+        refreshButton = new Button("Refresh");
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        Label selectBaudLabel = new Label("Select Baud Rate:");
+        baudRate = new ChoiceBox<>();
+        baudRate.getItems().addAll(BAUD_RATES);
+        baudRate.setValue("9600");
+        HBox topHbox = new HBox(selectPortLabel, port, refreshButton, 
+            spacer, selectBaudLabel, baudRate);
         topHbox.setPadding(new Insets(5));
         topHbox.setSpacing(5);
 
         // TextArea
-        TextArea serialIn = new TextArea();
+        serialIn = new TextArea();
         VBox.setVgrow(serialIn, Priority.ALWAYS);
         serialIn.setEditable(false);
 
         // Bottom HBox
-        TextField serialOut = new TextField();
+        serialOut = new TextField();
         HBox.setHgrow(serialOut, Priority.ALWAYS);
-        Button send = new Button("Send");
+        send = new Button("Send");
         HBox bottomHBox = new HBox(serialOut, send);
         bottomHBox.setPadding(new Insets(5));
         bottomHBox.setSpacing(5);
@@ -58,6 +93,7 @@ public class Window extends Application {
 
         // Main scene
         Scene mainScene = new Scene(vBox);
+        mainScene.getStylesheets().add(CSS_FILE);
 
         // Main Stage
         primaryStage.setScene(mainScene);
@@ -67,6 +103,9 @@ public class Window extends Application {
         primaryStage.setMinHeight(354);
         primaryStage.setTitle("Serial-User Interface");
         primaryStage.show();
+
+        // Start the main program
+        Main.start();
     }
 
     /**

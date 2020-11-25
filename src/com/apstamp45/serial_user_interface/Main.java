@@ -90,6 +90,11 @@ public class Main {
 		// }
 	}
 
+	/** Runs when the window loads. */
+	public static void start() {
+
+	}
+
 	public static void onDataSend() {
 		try {
 			String in = serialPort.readString();
