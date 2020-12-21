@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 
 /**
  * This class handles the JavaFX window.
+ * 
  * @author apstamp45
  * @see @see <a href="https://openjfx.io">JavaFX</a>
  * @since 10/27/2020
@@ -27,9 +28,21 @@ public class Window extends Application {
     /** Defines the css file for the window. */
     public final String CSS_FILE = "./style.css";
 
+    /** The minimum window height. */
+    public final int MIN_HEIGHT = 144;
+
+    /** The minimum window width. */
+    public final int MIN_WIDTH = 512;
+
+    /** The height at which the window is created. */
+    public final int WINDOW_HEIGHT_AT_START = 512;
+
+    /** The width at which the window is created. */
+    public final int WINDOW_WIDTH_AT_START = 512;
+
     /** Defines the default baud rates to chose from. */
-    public final String[] BAUD_RATES = {"110", "300", "1200", "4800", "9600", "14400", 
-        "19200", "38400", "57600", "15200", "128000", "256000"};
+    public final String[] BAUD_RATES = { "110", "300", "1200", "4800", "9600", "14400", "19200", "38400", "57600",
+            "15200", "128000", "256000" };
 
     /** Used to select the serial port. */
     public static ChoiceBox<String> port;
@@ -41,8 +54,7 @@ public class Window extends Application {
     public static ChoiceBox<String> baudRate;
 
     /**
-     * Shows the serial data that was
-     * sent by the serial device.
+     * Shows the serial data that was sent by the serial device.
      */
     public static TextArea serialIn;
 
@@ -50,8 +62,8 @@ public class Window extends Application {
     public static TextField serialOut;
 
     /**
-     * Sends the data in serialOut to the
-     * serial device.
+     * Sends the data in serialOut to the serial device.
+     * 
      * @see serialOut
      */
     public static Button send;
@@ -63,7 +75,16 @@ public class Window extends Application {
         //Top HBox
         Label selectPortLabel = new Label("Select Port:");
         port = new ChoiceBox<>();
+        port.setMaxWidth(128);
+        port.getSelectionModel().selectedItemProperty().addListener((e) -> {
+            Main.serialPortAdress = port.getValue();
+            Main.openPort();
+        });
         refreshButton = new Button("Refresh");
+        refreshButton.setOnMouseClicked((e) -> {
+            Main.getPorts();
+            Window.port.getItems().setAll(Main.ports);
+        });
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         Label selectBaudLabel = new Label("Select Baud Rate:");
@@ -97,10 +118,10 @@ public class Window extends Application {
 
         // Main Stage
         primaryStage.setScene(mainScene);
-        primaryStage.setWidth(512);
-        primaryStage.setHeight(512);
-        primaryStage.setMinWidth(354);
-        primaryStage.setMinHeight(354);
+        primaryStage.setWidth(WINDOW_WIDTH_AT_START);
+        primaryStage.setHeight(WINDOW_HEIGHT_AT_START);
+        primaryStage.setMinWidth(MIN_WIDTH);
+        primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setTitle("Serial-User Interface");
         primaryStage.show();
 

@@ -2,11 +2,8 @@ package com.apstamp45.serial_user_interface;
 
 import java.util.regex.Pattern;
 
-import javax.swing.JOptionPane;
-
 import com.apstamp45.serial_user_interface.window.Window;
 
-import javafx.application.Application;
 import jssc.SerialPort;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
@@ -22,10 +19,13 @@ import jssc.SerialPortList;
  */
 public class Main {
 
+	/** Stores all of the available serial ports. */
+	public static String[] ports;
+
 	/**
 	 * This String stores the adress of the serial device's port.
 	 */
-	private static String serialPortAdress;
+	public static String serialPortAdress;
 
 	/** The serial port */
 	private static SerialPort serialPort;
@@ -92,8 +92,13 @@ public class Main {
 
 	/** Runs when the window loads. */
 	public static void start() {
-		String[] ports = SerialPortList.getPortNames("/dev/", Pattern.compile("tty.*"));
+		getPorts();
 		Window.port.getItems().addAll(ports);
+	}
+	
+	/** Refreshes the port list. */
+	public static void getPorts() {
+		ports = SerialPortList.getPortNames("/dev/", Pattern.compile("tty.*"));
 	}
 
 	public static void onDataSend() {
@@ -103,5 +108,9 @@ public class Main {
 		} catch (SerialPortException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void openPort() {
+
 	}
 }
