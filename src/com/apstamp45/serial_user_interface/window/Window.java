@@ -77,8 +77,10 @@ public class Window extends Application {
         port = new ChoiceBox<>();
         port.setMaxWidth(128);
         port.getSelectionModel().selectedItemProperty().addListener((e) -> {
-            Main.serialPortAdress = port.getValue();
-            Main.openPort();
+            if (port.getSelectionModel().getSelectedItem() != null) {
+                Main.serialPortAdress = port.getSelectionModel().getSelectedItem();
+                Main.openPort();
+            }
         });
         refreshButton = new Button("Refresh");
         refreshButton.setOnMouseClicked((e) -> {
@@ -127,6 +129,12 @@ public class Window extends Application {
 
         // Start the main program
         Main.start();
+    }
+
+    /** Runs just before the window closes. */
+    @Override
+    public void stop() {
+        Main.close();
     }
 
     /**

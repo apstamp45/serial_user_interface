@@ -95,12 +95,18 @@ public class Main {
 		getPorts();
 		Window.port.getItems().addAll(ports);
 	}
+
+	/** Runs when the window closes. */
+	public static void close() {
+		closePort();
+	}
 	
 	/** Refreshes the port list. */
 	public static void getPorts() {
 		ports = SerialPortList.getPortNames("/dev/", Pattern.compile("tty.*"));
 	}
 
+	/** Runs when data is sent from serial port. */
 	public static void onDataSend() {
 		try {
 			String in = serialPort.readString();
@@ -110,7 +116,13 @@ public class Main {
 		}
 	}
 
+	/** Opens the serial port. */
 	public static void openPort() {
+		System.out.println("Port: " + serialPortAdress);
+	}
 
+	/** Closes the serial port. */
+	public static void closePort() {
+		System.out.println("Port: close");
 	}
 }
