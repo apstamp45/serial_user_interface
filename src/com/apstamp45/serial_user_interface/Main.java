@@ -2,6 +2,7 @@ package com.apstamp45.serial_user_interface;
 
 import java.util.regex.Pattern;
 
+import com.apstamp45.serial_user_interface.event.SerialEventHandler;
 import com.apstamp45.serial_user_interface.window.Window;
 
 import jssc.SerialPort;
@@ -19,6 +20,7 @@ import jssc.SerialPortList;
  */
 public class Main {
 
+	public static int baudRate;
 	/** Stores all of the available serial ports. */
 	public static String[] ports;
 
@@ -118,11 +120,26 @@ public class Main {
 
 	/** Opens the serial port. */
 	public static void openPort() {
-		System.out.println("Port: " + serialPortAdress);
+		serialPort = new SerialPort(serialPortAdress);
+		try {
+			serialPort.openPort();
+			serialPort.setParams(baudRate, 8, 1, 0);
+			serialPort.addEventListener(new SerialEventHandler());
+		} catch (SerialPortException e) {
+			System.out.println("Port could not be opened.");
+			e.printStackTrace();
+		}
 	}
 
 	/** Closes the serial port. */
 	public static void closePort() {
-		System.out.println("Port: close");
+		try {
+			if (serialPort.isOpened()) {
+				serialPort.closePort();
+			}
+		} catch (SerialPortException e) {
+			System.out.println("Port could not be closed.");
+			e.printStackTrace();
+		}
 	}
 }
