@@ -112,7 +112,7 @@ public class Main {
 	public static void onDataSend() {
 		try {
 			String in = serialPort.readString();
-			System.out.println(in);
+			Window.serialIn.appendText(in);
 		} catch (SerialPortException e) {
 			e.printStackTrace();
 		}
@@ -120,8 +120,10 @@ public class Main {
 
 	/** Opens the serial port. */
 	public static void openPort() {
-		serialPort = new SerialPort(serialPortAdress);
 		try {
+			closePort();
+			serialPortAdress = Window.port.getSelectionModel().getSelectedItem();
+			serialPort = new SerialPort(serialPortAdress);
 			serialPort.openPort();
 			serialPort.setParams(baudRate, 8, 1, 0);
 			serialPort.addEventListener(new SerialEventHandler());
@@ -134,7 +136,7 @@ public class Main {
 	/** Closes the serial port. */
 	public static void closePort() {
 		try {
-			if (serialPort.isOpened()) {
+			if (serialPort != null && serialPort.isOpened()) {
 				serialPort.closePort();
 			}
 		} catch (SerialPortException e) {

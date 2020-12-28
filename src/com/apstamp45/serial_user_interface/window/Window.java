@@ -78,7 +78,6 @@ public class Window extends Application {
         port.setMaxWidth(128);
         port.getSelectionModel().selectedItemProperty().addListener((e) -> {
             if (port.getSelectionModel().getSelectedItem() != null) {
-                Main.serialPortAdress = port.getSelectionModel().getSelectedItem();
                 Main.openPort();
             }
         });
