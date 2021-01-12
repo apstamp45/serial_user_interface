@@ -112,7 +112,13 @@ public class Main {
 	public static void onDataSend() {
 		try {
 			String in = serialPort.readString();
-			Window.serialIn.appendText(in);
+			if (Window.autoScroll) {
+				Window.serialIn.appendText(in);
+			} else {
+				int caretPosition = Window.serialIn.getCaretPosition();
+				Window.serialIn.appendText(in);
+				Window.serialIn.positionCaret(caretPosition);
+			}
 		} catch (SerialPortException e) {
 			e.printStackTrace();
 		}

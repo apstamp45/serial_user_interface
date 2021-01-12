@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -43,6 +44,12 @@ public class Window extends Application {
     /** Defines the default baud rates to chose from. */
     public final String[] BAUD_RATES = { "110", "300", "1200", "4800", "9600", "14400", "19200", "38400", "57600",
             "15200", "128000", "256000" };
+    
+    /** Indicates wether or not to auto scroll serialIn. */
+    public static boolean autoScroll = true;
+
+    /** Can be used by the user to enable/disable auto scrolling. */
+    private static CheckBox autoScrollCheckBox;
 
     /** Used to select the serial port. */
     public static ChoiceBox<String> port;
@@ -53,9 +60,7 @@ public class Window extends Application {
     /** Used to select the baud rate. */
     public static ChoiceBox<String> baudRate;
 
-    /**
-     * Shows the serial data that was sent by the serial device.
-     */
+    /** Shows the serial data that was sent by the serial device. */
     public static TextArea serialIn;
 
     /** Used to send data to the serial device. */
@@ -76,7 +81,7 @@ public class Window extends Application {
         Label selectPortLabel = new Label("Select Port:");
         port = new ChoiceBox<>();
         port.setMaxWidth(128);
-        port.getSelectionModel().selectedItemProperty().addListener((e) -> {
+        port.getSelectionModel().selectedItemProperty().addListener(e -> {
             if (port.getSelectionModel().getSelectedItem() != null) {
                 Main.openPort();
             }
@@ -103,10 +108,15 @@ public class Window extends Application {
         serialIn.setEditable(false);
 
         // Bottom HBox
+        autoScrollCheckBox = new CheckBox("Auto Scroll");
+        autoScrollCheckBox.selectedProperty().set(true);
+        autoScrollCheckBox.selectedProperty().addListener(e -> {
+            autoScroll = autoScrollCheckBox.selectedProperty().get();
+        });
         serialOut = new TextField();
         HBox.setHgrow(serialOut, Priority.ALWAYS);
         send = new Button("Send");
-        HBox bottomHBox = new HBox(serialOut, send);
+        HBox bottomHBox = new HBox(autoScrollCheckBox, serialOut, send);
         bottomHBox.setPadding(new Insets(5));
         bottomHBox.setSpacing(5);
 
