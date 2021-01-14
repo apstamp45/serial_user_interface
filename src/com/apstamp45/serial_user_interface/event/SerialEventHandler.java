@@ -18,6 +18,7 @@ public class SerialEventHandler implements SerialPortEventListener {
      */
     @Override
     public void serialEvent(SerialPortEvent event) {
+        System.out.println("serial event");
         if (event.isRXCHAR()) {
             Main.onDataSend();
         }

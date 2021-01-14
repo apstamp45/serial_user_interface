@@ -110,6 +110,7 @@ public class Main {
 
 	/** Runs when data is sent from serial port. */
 	public static void onDataSend() {
+		System.out.println("data recieved");
 		try {
 			String in = serialPort.readString();
 			if (Window.autoScroll) {
@@ -133,6 +134,8 @@ public class Main {
 			serialPort.openPort();
 			serialPort.setParams(baudRate, 8, 1, 0);
 			serialPort.addEventListener(new SerialEventHandler());
+			System.out.println("port opened");
+			System.out.println(serialPortAdress);
 		} catch (SerialPortException e) {
 			System.out.println("Port could not be opened.");
 			e.printStackTrace();
@@ -144,6 +147,7 @@ public class Main {
 		try {
 			if (serialPort != null && serialPort.isOpened()) {
 				serialPort.closePort();
+				System.out.println("port closed");
 			}
 		} catch (SerialPortException e) {
 			System.out.println("Port could not be closed.");
