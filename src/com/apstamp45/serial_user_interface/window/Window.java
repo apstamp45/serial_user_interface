@@ -68,7 +68,6 @@ public class Window extends Application {
 
     /**
      * Sends the data in serialOut to the serial device.
-     * 
      * @see serialOut
      */
     public static Button send;

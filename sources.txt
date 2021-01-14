@@ -1,3 +1,3 @@
-./src/com/apstamp45/serial_user_interface/event/SerialEventHandler.java
-./src/com/apstamp45/serial_user_interface/Main.java
 ./src/com/apstamp45/serial_user_interface/window/Window.java
+./src/com/apstamp45/serial_user_interface/Main.java
+./src/com/apstamp45/serial_user_interface/event/SerialEventHandler.java
