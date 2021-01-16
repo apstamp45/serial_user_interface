@@ -6,7 +6,7 @@ import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
 
 /**
- * Handles the serial port events.
+ * Handles serial port events.
  * @author apstamp45
  * @since 10/23/20
  */
