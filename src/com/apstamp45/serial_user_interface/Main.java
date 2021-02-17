@@ -6,6 +6,8 @@ import com.apstamp45.serial_user_interface.event.SerialEventHandler;
 import com.apstamp45.serial_user_interface.window.Window;
 
 import jssc.SerialPort;
+import jssc.SerialPortEvent;
+import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
 
@@ -39,63 +41,13 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		Window.runWindow(args);
-		// if (args.length > 0) {
-		// 	String[] ports = SerialPortList.getPortNames("/dev/", Pattern.compile("tty.*"));
-		// 	for (String portName : ports) {
-		// 		if (portName.equals(args[0])) {
-		// 			serialPortAdress = args[0];
-		// 		}
-		// 	}
-		// 	if (serialPortAdress == null) {
-		// 		System.out.println("Your port could not be found.");
-		// 		if (ports.length == 0) {
-		// 			System.out.println("No ports available.");
-		// 		} else {
-		// 			System.out.println("Here's a list of the available ports:");
-		// 			for (int i = 0; i < ports.length; i++) {
-		// 				System.out.println(i + ". " + ports[i]);
-		// 			}
-		// 		}
-		// 		System.exit(1);
-		// 	}
-		// } else {
-		// 	System.out.println("Usage: java com.apstamp45.serial_console_interface.Main <port adress>");
-		// 	String[] ports = SerialPortList.getPortNames("/dev/", Pattern.compile("tty.wchusbserial*"));
-		// 	if (ports.length == 0) {
-		// 		System.out.println("No ports available.");
-		// 	} else {
-		// 		System.out.println("Here's a list of the available ports:");
-		// 		for (int i = 0; i < ports.length; i++) {
-		// 			System.out.println(i + ". " + ports[i]);
-		// 		}
-		// 	}
-		// 	System.exit(1);
-		// }
-		// Window.launch(args);
-		// serialPort = new SerialPort(serialPortAdress);
-		// try {
-		// 	if (serialPort.openPort()) {
-		// 		System.out.println("Port opened.");
-		// 	}
-		// 	serialPort.setParams(9600, 8, 1, 0);
-		// 	serialPort.addEventListener(new SerialEventHandler());
-		// 	String out;
-		// 	while (true) {
-		// 		out = JOptionPane.showInputDialog("Send text (or :X to exit)");
-		// 		if (out.equalsIgnoreCase(":X")) {
-		// 			break;
-		// 		}
-		// 	}
-		// 	serialPort.closePort();
-		// } catch (SerialPortException e) {
-		// 	e.printStackTrace();
-		// }
 	}
 
 	/** Runs when the window loads. */
 	public static void start() {
 		getPorts();
 		Window.port.getItems().addAll(ports);
+		baudRate = Integer.decode(Window.baudRate.getValue()).intValue();
 	}
 
 	/** Runs when the window closes. */
@@ -110,7 +62,6 @@ public class Main {
 
 	/** Runs when data is sent from serial port. */
 	public static void onDataSend() {
-		System.out.println("data recieved");
 		try {
 			String in = serialPort.readString();
 			if (Window.autoScroll) {
@@ -132,8 +83,11 @@ public class Main {
 			serialPortAdress = Window.port.getSelectionModel().getSelectedItem();
 			serialPort = new SerialPort(serialPortAdress);
 			serialPort.openPort();
+			System.out.println(baudRate);
 			serialPort.setParams(baudRate, 8, 1, 0);
-			serialPort.addEventListener(new SerialEventHandler());
+			SerialEventHandler serialEventHandler = new SerialEventHandler();
+			serialPort.addEventListener(serialEventHandler);
+			System.out.println(serialEventHandler);
 			System.out.println("port opened");
 			System.out.println(serialPortAdress);
 		} catch (SerialPortException e) {
