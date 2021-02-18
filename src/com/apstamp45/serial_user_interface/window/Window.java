@@ -18,139 +18,138 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
- * This class handles the JavaFX window.
- * @author apstamp45
- * @see @see <a href="https://openjfx.io">JavaFX</a>
- */
+* This class handles the JavaFX window.
+* @author apstamp45
+* @see @see <a href="https://openjfx.io">JavaFX</a>
+*/
 public class Window extends Application {
 
-    /** Defines the css file for the window. */
-    public final String CSS_FILE = "./style.css";
+	/** Defines the css file for the window. */
+	public final String CSS_FILE = "./style.css";
 
-    /** The minimum window height. */
-    public final int MIN_HEIGHT = 144;
+	/** The minimum window height. */
+	public final int MIN_HEIGHT = 144;
 
-    /** The minimum window width. */
-    public final int MIN_WIDTH = 512;
+	/** The minimum window width. */
+	public final int MIN_WIDTH = 512;
 
-    /** The height at which the window is created. */
-    public final int WINDOW_HEIGHT_AT_START = 512;
+	/** The height at which the window is created. */
+	public final int WINDOW_HEIGHT_AT_START = 512;
 
-    /** The width at which the window is created. */
-    public final int WINDOW_WIDTH_AT_START = 512;
+	/** The width at which the window is created. */
+	public final int WINDOW_WIDTH_AT_START = 512;
 
-    /** Defines the default baud rates to chose from. */
-    public final String[] BAUD_RATES = { "110", "300", "1200", "4800", "9600", "14400", "19200", "38400", "57600",
-            "15200", "128000", "256000" };
-    
-    /** Indicates wether or not to auto scroll serialIn. */
-    public static boolean autoScroll = true;
+	/** Defines the default baud rates to chose from. */
+	public final String[] BAUD_RATES = {"110", "300", "1200", "4800", "9600", "14400", "19200", "38400", "57600", "15200", "128000", "256000"};
 
-    /** Can be used by the user to enable/disable auto scrolling. */
-    private static CheckBox autoScrollCheckBox;
+	/** Indicates wether or not to auto scroll serialIn. */
+	public static boolean autoScroll = true;
 
-    /** Used to select the serial port. */
-    public static ChoiceBox<String> port;
+	/** Can be used by the user to enable/disable auto scrolling. */
+	private static CheckBox autoScrollCheckBox;
 
-    /** Refreshes the list of available ports. */
-    public static Button refreshButton;
+	/** Used to select the serial port. */
+	public static ChoiceBox<String> port;
 
-    /** Used to select the baud rate. */
-    public static ChoiceBox<String> baudRate;
+	/** Refreshes the list of available ports. */
+	public static Button refreshButton;
 
-    /** Shows the serial data that was sent by the serial device. */
-    public static TextArea serialIn;
+	/** Used to select the baud rate. */
+	public static ChoiceBox<String> baudRate;
 
-    /** Used to send data to the serial device. */
-    public static TextField serialOut;
+	/** Shows the serial data that was sent by the serial device. */
+	public static TextArea serialIn;
 
-    /**
-     * Sends the data in serialOut to the serial device.
-     * @see serialOut
-     */
-    public static Button send;
+	/** Used to send data to the serial device. */
+	public static TextField serialOut;
 
-    /** Opens a window. */
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+	/**
+	* Sends the data in serialOut to the serial device.
+	* @see serialOut
+	*/
+	public static Button send;
 
-        //Top HBox
-        Label selectPortLabel = new Label("Select Port:");
-        port = new ChoiceBox<>();
-        port.setMaxWidth(128);
-        port.getSelectionModel().selectedItemProperty().addListener(e -> {
-            if (port.getSelectionModel().getSelectedItem() != null) {
-                Main.openPort();
-            }
-        });
-        refreshButton = new Button("Refresh");
-        refreshButton.setOnMouseClicked((e) -> {
-            Main.getPorts();
-            Window.port.getItems().setAll(Main.ports);
-        });
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        Label selectBaudLabel = new Label("Select Baud Rate:");
-        baudRate = new ChoiceBox<>();
-        baudRate.getItems().addAll(BAUD_RATES);
-        baudRate.setValue("9600");
-        HBox topHbox = new HBox(selectPortLabel, port, refreshButton, 
-            spacer, selectBaudLabel, baudRate);
-        topHbox.setPadding(new Insets(5));
-        topHbox.setSpacing(5);
+	/** Opens a window. */
+	@Override
+	public void start(Stage primaryStage) throws Exception {
 
-        // TextArea
-        serialIn = new TextArea();
-        VBox.setVgrow(serialIn, Priority.ALWAYS);
-        serialIn.setEditable(false);
+		//Top HBox
+		Label selectPortLabel = new Label("Select Port:");
+		port = new ChoiceBox<>();
+		port.setMaxWidth(128);
+		port.getSelectionModel().selectedItemProperty().addListener(e -> {
+			if (port.getSelectionModel().getSelectedItem() != null) {
+				Main.openPort();
+			}
+		});
+		refreshButton = new Button("Refresh");
+		refreshButton.setOnMouseClicked((e) -> {
+			Main.getPorts();
+			Window.port.getItems().setAll(Main.ports);
+		});
+		Region spacer = new Region();
+		HBox.setHgrow(spacer, Priority.ALWAYS);
+		Label selectBaudLabel = new Label("Select Baud Rate:");
+		baudRate = new ChoiceBox<>();
+		baudRate.getItems().addAll(BAUD_RATES);
+		baudRate.setValue("9600");
+		HBox topHbox = new HBox(selectPortLabel, port, refreshButton, 
+		spacer, selectBaudLabel, baudRate);
+		topHbox.setPadding(new Insets(5));
+		topHbox.setSpacing(5);
 
-        // Bottom HBox
-        autoScrollCheckBox = new CheckBox("Auto Scroll");
-        autoScrollCheckBox.selectedProperty().set(true);
-        autoScrollCheckBox.selectedProperty().addListener(e -> {
-            autoScroll = autoScrollCheckBox.selectedProperty().get();
-        });
-        serialOut = new TextField();
-        HBox.setHgrow(serialOut, Priority.ALWAYS);
-        send = new Button("Send");
-	send.setOnMouseReleased(e -> {
-		Main.sendData();
-	});
-        HBox bottomHBox = new HBox(autoScrollCheckBox, serialOut, send);
-        bottomHBox.setPadding(new Insets(5));
-        bottomHBox.setSpacing(5);
+		// TextArea
+		serialIn = new TextArea();
+		VBox.setVgrow(serialIn, Priority.ALWAYS);
+		serialIn.setEditable(false);
 
-        // VBox
-        VBox vBox = new VBox(topHbox, serialIn, bottomHBox);
+		// Bottom HBox
+		autoScrollCheckBox = new CheckBox("Auto Scroll");
+		autoScrollCheckBox.selectedProperty().set(true);
+		autoScrollCheckBox.selectedProperty().addListener(e -> {
+			autoScroll = autoScrollCheckBox.selectedProperty().get();
+		});
+		serialOut = new TextField();
+		HBox.setHgrow(serialOut, Priority.ALWAYS);
+		send = new Button("Send");
+		send.setOnMouseReleased(e -> {
+			Main.sendData();
+		});
+		HBox bottomHBox = new HBox(autoScrollCheckBox, serialOut, send);
+		bottomHBox.setPadding(new Insets(5));
+		bottomHBox.setSpacing(5);
 
-        // Main scene
-        Scene mainScene = new Scene(vBox);
-        mainScene.getStylesheets().add(CSS_FILE);
+		// VBox
+		VBox vBox = new VBox(topHbox, serialIn, bottomHBox);
 
-        // Main Stage
-        primaryStage.setScene(mainScene);
-        primaryStage.setWidth(WINDOW_WIDTH_AT_START);
-        primaryStage.setHeight(WINDOW_HEIGHT_AT_START);
-        primaryStage.setMinWidth(MIN_WIDTH);
-        primaryStage.setMinHeight(MIN_HEIGHT);
-        primaryStage.setTitle("Serial-User Interface");
-        primaryStage.show();
+		// Main scene
+		Scene mainScene = new Scene(vBox);
+		mainScene.getStylesheets().add(CSS_FILE);
 
-        // Start the main program
-        Main.start();
-    }
+		// Main Stage
+		primaryStage.setScene(mainScene);
+		primaryStage.setWidth(WINDOW_WIDTH_AT_START);
+		primaryStage.setHeight(WINDOW_HEIGHT_AT_START);
+		primaryStage.setMinWidth(MIN_WIDTH);
+		primaryStage.setMinHeight(MIN_HEIGHT);
+		primaryStage.setTitle("Serial-User Interface");
+		primaryStage.show();
 
-    /** Runs just before the window closes. */
-    @Override
-    public void stop() {
-        Main.close();
-    }
+		// Start the main program
+		Main.start();
+	}
 
-    /**
-     * Runs the window.
-     * @param args The command line inputs.
-     */
-    public static void runWindow(String[] args) {
-        Window.launch(args);
-    }
+	/** Runs just before the window closes. */
+	@Override
+	public void stop() {
+		Main.close();
+	}
+
+	/**
+	* Runs the window.
+	* @param args The command line inputs.
+	*/
+	public static void runWindow(String[] args) {
+		Window.launch(args);
+	}
 }

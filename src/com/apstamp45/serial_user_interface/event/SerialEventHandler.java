@@ -1,6 +1,7 @@
 package com.apstamp45.serial_user_interface.event;
 
 import com.apstamp45.serial_user_interface.Main;
+
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
 
