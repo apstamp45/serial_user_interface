@@ -19,10 +19,8 @@ import javafx.stage.Stage;
 
 /**
  * This class handles the JavaFX window.
- * 
  * @author apstamp45
  * @see @see <a href="https://openjfx.io">JavaFX</a>
- * @since 10/27/2020
  */
 public class Window extends Application {
 
@@ -115,6 +113,9 @@ public class Window extends Application {
         serialOut = new TextField();
         HBox.setHgrow(serialOut, Priority.ALWAYS);
         send = new Button("Send");
+	send.setOnMouseReleased(e -> {
+		Main.sendData();
+	});
         HBox bottomHBox = new HBox(autoScrollCheckBox, serialOut, send);
         bottomHBox.setPadding(new Insets(5));
         bottomHBox.setSpacing(5);

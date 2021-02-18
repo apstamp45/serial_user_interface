@@ -7,7 +7,6 @@ import jssc.SerialPortEventListener;
 /**
 * Handles the serial events.
 * @author apstamp45
-* @since 1/15/21
 */
 public class SerialEventHandler implements SerialPortEventListener {
 
@@ -15,7 +14,7 @@ public class SerialEventHandler implements SerialPortEventListener {
 	@Override
 	public void serialEvent(SerialPortEvent serialPortEvent) {
 		if (serialPortEvent.isRXCHAR()) {
-			Main.onDataSend();
+			Main.recieveData();
 		}
 	}
 }

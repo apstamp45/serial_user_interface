@@ -12,31 +12,31 @@ import jssc.SerialPortException;
 import jssc.SerialPortList;
 
 /**
- * This project uses the JSSC library to create and interface between the
- * computer and an serial device (on Mac).
- * 
+ * This project uses the JSSC library to create and interface between a 
+ * Mac and a serial device.
  * @see <a href=
  *      "https://github.com/scream3r/java-simple-serial-connector/releases/tag/v2.8.0">JSSC</a>
  * @author apstamp45
- * @since 10/23/20
  */
 public class Main {
 
+	/** 
+	 * Defines the baud rate at which the computer 
+	 * and serial device will communicate.
+	 */
 	public static int baudRate;
-	/** Stores all of the available serial ports. */
+
+	/** Stores the names of all of the available serial ports. */
 	public static String[] ports;
 
-	/**
-	 * This String stores the adress of the serial device's port.
-	 */
+	/** This String stores the adress of the serial device's port. */
 	public static String serialPortAdress;
 
 	/** The serial port */
 	private static SerialPort serialPort;
 
 	/**
-	 * The main method.
-	 * 
+	 * Runs the window.
 	 * @param args The command line arguments.
 	 */
 	public static void main(String[] args) {
@@ -55,25 +55,9 @@ public class Main {
 		closePort();
 	}
 	
-	/** Refreshes the port list. */
+	/** Refreshes the list of port names. */
 	public static void getPorts() {
 		ports = SerialPortList.getPortNames("/dev/", Pattern.compile("tty.*"));
-	}
-
-	/** Runs when data is sent from serial port. */
-	public static void onDataSend() {
-		try {
-			String in = serialPort.readString();
-			if (Window.autoScroll) {
-				Window.serialIn.appendText(in);
-			} else {
-				int caretPosition = Window.serialIn.getCaretPosition();
-				Window.serialIn.appendText(in);
-				Window.serialIn.positionCaret(caretPosition);
-			}
-		} catch (SerialPortException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/** Opens the serial port. */
@@ -83,13 +67,10 @@ public class Main {
 			serialPortAdress = Window.port.getSelectionModel().getSelectedItem();
 			serialPort = new SerialPort(serialPortAdress);
 			serialPort.openPort();
-			System.out.println(baudRate);
 			serialPort.setParams(baudRate, 8, 1, 0);
 			SerialEventHandler serialEventHandler = new SerialEventHandler();
 			serialPort.addEventListener(serialEventHandler);
-			System.out.println(serialEventHandler);
-			System.out.println("port opened");
-			System.out.println(serialPortAdress);
+			System.out.println("Serial port opened: " + serialPortAdress + " at " + baudRate + " baud.");
 		} catch (SerialPortException e) {
 			System.out.println("Port could not be opened.");
 			e.printStackTrace();
@@ -101,10 +82,44 @@ public class Main {
 		try {
 			if (serialPort != null && serialPort.isOpened()) {
 				serialPort.closePort();
-				System.out.println("port closed");
+				System.out.println("Serial port closed: " + serialPortAdress + " .");
 			}
 		} catch (SerialPortException e) {
 			System.out.println("Port could not be closed.");
+			e.printStackTrace();
+		}
+	}
+
+	/** Runs when data is sent from serial device. */
+	public static void recieveData() {
+		try {
+			String recievedData = serialPort.readString();
+			if (Window.autoScroll) {
+				Window.serialIn.appendText(recievedData + "\n");
+			} else {
+				int caretPosition = Window.serialIn.getCaretPosition();
+				Window.serialIn.appendText(recievedData);
+				Window.serialIn.positionCaret(caretPosition);
+			}
+			System.out.println("Data recieved: " + recievedData + " .");
+		} catch (SerialPortException e) {
+			System.out.println("Data could not be read.");
+			e.printStackTrace();
+		}
+	}
+
+	/** Sends data to the serial device. **/
+	public static void sendData() {
+		try {
+			if (serialPort != null) {
+				String data = Window.serialOut.getText();
+				serialPort.writeBytes(data.getBytes());
+				System.out.println("Data sent: " + data + " .");
+			} else {
+				System.out.println("Data could not be sent: serial device not connected.");
+			}
+		} catch (SerialPortException e) {
+			System.out.println("Data could not be sent.");
 			e.printStackTrace();
 		}
 	}
