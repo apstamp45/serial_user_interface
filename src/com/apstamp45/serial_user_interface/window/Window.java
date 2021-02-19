@@ -95,6 +95,11 @@ public class Window extends Application {
 		baudRate = new ChoiceBox<>();
 		baudRate.getItems().addAll(BAUD_RATES);
 		baudRate.setValue("9600");
+		baudRate.getSelectionModel().selectedItemProperty().addListener(e -> {
+			if (baudRate.getSelectionModel().getSelectedItem() != null) {
+				Main.baudRate = Integer.decode(baudRate.getSelectionModel().getSelectedItem()).intValue();
+			}
+		});
 		HBox topHbox = new HBox(selectPortLabel, port, refreshButton, 
 		spacer, selectBaudLabel, baudRate);
 		topHbox.setPadding(new Insets(5));
