@@ -45,9 +45,9 @@ public class Main {
 
 	/** Runs when the window loads. */
 	public static void start() {
-		getPorts();
-		Window.port.getItems().addAll(ports);
 		baudRate = Integer.decode(Window.baudRate.getValue()).intValue();
+		getPorts();
+		Window.port.getItems().setAll(ports);
 	}
 
 	/** Runs when the window closes. */
@@ -57,8 +57,7 @@ public class Main {
 	
 	/** Refreshes the list of port names. */
 	public static void getPorts() {
-		ports = SerialPortList.getPortNames("/dev/", Pattern.compile("tty.*"));
-		System.out.println("Serial port list refreshed.");
+		ports = SerialPortList.getPortNames("/dev/", Pattern.compile("tty\\..*"));
 	}
 
 	/** Opens the serial port. */
@@ -71,6 +70,7 @@ public class Main {
 			serialPort.setParams(baudRate, 8, 1, 0);
 			SerialEventHandler serialEventHandler = new SerialEventHandler();
 			serialPort.addEventListener(serialEventHandler);
+			Window.serialIn.clear();
 			System.out.println("Serial port \"" + serialPortAdress + "\" opened at " + baudRate + " baud.");
 		} catch (SerialPortException e) {
 			System.out.println("Port could not be opened.");
