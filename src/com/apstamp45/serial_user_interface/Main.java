@@ -64,7 +64,6 @@ public class Main {
 	public static void openPort() {
 		try {
 			closePort();
-			serialPortAdress = Window.port.getSelectionModel().getSelectedItem();
 			serialPort = new SerialPort(serialPortAdress);
 			serialPort.openPort();
 			serialPort.setParams(baudRate, 8, 1, 0);

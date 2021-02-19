@@ -79,7 +79,9 @@ public class Window extends Application {
 		port = new ChoiceBox<>();
 		port.setMaxWidth(128);
 		port.getSelectionModel().selectedItemProperty().addListener(e -> {
-			if (port.getSelectionModel().getSelectedItem() != null) {
+			String selectedPort = port.getSelectionModel().getSelectedItem();
+			if (selectedPort != null && !selectedPort.equals(Main.serialPortAdress)) {
+				Main.serialPortAdress = selectedPort;
 				Main.openPort();
 			}
 		});
