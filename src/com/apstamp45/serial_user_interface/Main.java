@@ -114,7 +114,7 @@ public class Main {
 		try {
 			if (serialPort != null) {
 				String data = Window.serialOut.getText();
-				if (data.length() > 1) {
+				if (data.length() > 0) {
 					serialPort.writeBytes(data.getBytes());
 					System.out.println("Data sent: \"" + data + "\".");
 				} else {
