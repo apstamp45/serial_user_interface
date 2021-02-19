@@ -52,8 +52,8 @@ public class Window extends Application {
 	/** Used to select the serial port. */
 	public static ChoiceBox<String> port;
 
-	/** Refreshes the list of available ports. */
-	public static Button refreshButton;
+	/** Closes and re-opens the serial port. */
+	public static Button reopen;
 
 	/** Used to select the baud rate. */
 	public static ChoiceBox<String> baudRate;
@@ -81,13 +81,16 @@ public class Window extends Application {
 		port.getSelectionModel().selectedItemProperty().addListener(e -> {
 			if (port.getSelectionModel().getSelectedItem() != null) {
 				Main.openPort();
-				serialIn.clear();
 			}
 		});
-		refreshButton = new Button("Refresh");
-		refreshButton.setOnMouseClicked((e) -> {
+		port.setOnMouseReleased(e -> {
 			Main.getPorts();
 			Window.port.getItems().setAll(Main.ports);
+		});
+		reopen = new Button("Re-Open");
+		reopen.setOnMouseClicked((e) -> {
+			Main.closePort();
+			Main.openPort();
 		});
 		Region spacer = new Region();
 		HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -100,7 +103,7 @@ public class Window extends Application {
 				Main.baudRate = Integer.decode(baudRate.getSelectionModel().getSelectedItem()).intValue();
 			}
 		});
-		HBox topHbox = new HBox(selectPortLabel, port, refreshButton, 
+		HBox topHbox = new HBox(selectPortLabel, port, reopen, 
 		spacer, selectBaudLabel, baudRate);
 		topHbox.setPadding(new Insets(5));
 		topHbox.setSpacing(5);
