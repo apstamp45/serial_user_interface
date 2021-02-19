@@ -11,6 +11,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -80,6 +81,7 @@ public class Window extends Application {
 		port.getSelectionModel().selectedItemProperty().addListener(e -> {
 			if (port.getSelectionModel().getSelectedItem() != null) {
 				Main.openPort();
+				serialIn.clear();
 			}
 		});
 		refreshButton = new Button("Refresh");
@@ -108,12 +110,24 @@ public class Window extends Application {
 		autoScrollCheckBox.selectedProperty().set(true);
 		autoScrollCheckBox.selectedProperty().addListener(e -> {
 			autoScroll = autoScrollCheckBox.selectedProperty().get();
+			if (autoScroll == true) {
+				System.out.println("Auto scroll: on.");
+			} else {
+				System.out.println("Auto scroll: off.");
+			}
 		});
 		serialOut = new TextField();
+		serialOut.setOnKeyReleased(e -> {
+			if (e.getCode() == KeyCode.ENTER) {
+				Main.sendData();
+				serialOut.clear();
+			}
+		});
 		HBox.setHgrow(serialOut, Priority.ALWAYS);
 		send = new Button("Send");
 		send.setOnMouseReleased(e -> {
 			Main.sendData();
+			serialOut.clear();
 		});
 		HBox bottomHBox = new HBox(autoScrollCheckBox, serialOut, send);
 		bottomHBox.setPadding(new Insets(5));

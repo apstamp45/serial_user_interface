@@ -58,6 +58,7 @@ public class Main {
 	/** Refreshes the list of port names. */
 	public static void getPorts() {
 		ports = SerialPortList.getPortNames("/dev/", Pattern.compile("tty.*"));
+		System.out.println("Serial port list refreshed.");
 	}
 
 	/** Opens the serial port. */
@@ -70,7 +71,7 @@ public class Main {
 			serialPort.setParams(baudRate, 8, 1, 0);
 			SerialEventHandler serialEventHandler = new SerialEventHandler();
 			serialPort.addEventListener(serialEventHandler);
-			System.out.println("Serial port opened: " + serialPortAdress + " at " + baudRate + " baud.");
+			System.out.println("Serial port \"" + serialPortAdress + "\" opened at " + baudRate + " baud.");
 		} catch (SerialPortException e) {
 			System.out.println("Port could not be opened.");
 			e.printStackTrace();
@@ -82,7 +83,7 @@ public class Main {
 		try {
 			if (serialPort != null && serialPort.isOpened()) {
 				serialPort.closePort();
-				System.out.println("Serial port closed: " + serialPortAdress + " .");
+				System.out.println("Serial port \"" + serialPortAdress + "\" closed.");
 			}
 		} catch (SerialPortException e) {
 			System.out.println("Port could not be closed.");
@@ -101,7 +102,7 @@ public class Main {
 				Window.serialIn.appendText(recievedData);
 				Window.serialIn.positionCaret(caretPosition);
 			}
-			System.out.println("Data recieved: " + recievedData + " .");
+			System.out.println("Data recieved: \"" + recievedData + "\".");
 		} catch (SerialPortException e) {
 			System.out.println("Data could not be read.");
 			e.printStackTrace();
@@ -113,8 +114,12 @@ public class Main {
 		try {
 			if (serialPort != null) {
 				String data = Window.serialOut.getText();
-				serialPort.writeBytes(data.getBytes());
-				System.out.println("Data sent: " + data + " .");
+				if (data.length() > 1) {
+					serialPort.writeBytes(data.getBytes());
+					System.out.println("Data sent: \"" + data + "\".");
+				} else {
+					System.out.println("Data could not be sent: no data to send.");
+				}
 			} else {
 				System.out.println("Data could not be sent: serial device not connected.");
 			}
