@@ -62,6 +62,9 @@ public class Main {
 
 	/** Opens the serial port. */
 	public static void openPort() {
+		if (serialPortAdress == null) {
+			return;
+		}
 		try {
 			closePort();
 			serialPort = new SerialPort(serialPortAdress);

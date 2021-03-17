@@ -1,3 +1,35 @@
-.button {
-    -fx-background-color: red;
+.box {
+	-fx-background-color: #62605D;
+}
+.button, .choice-box {
+	-fx-background-color: #62605D;
+	-fx-text-fill: #E7E7E7;
+}
+.check-box: selected .mark {
+	-fx-background-color: #E7E7E7;
+}
+.content {
+	-fx-background-color: transparent;
+}
+.context-menu {
+	-fx-background-color: #2C2D29;
+}
+.label, .check-box {
+	-fx-text-fill:#E7E7E7;
+}
+.menu-item: focused {
+	-fx-background-color: #62605D;
+}
+.root {
+	-fx-background-color: #272521;
+}
+.text {
+	-fx-font-smoothing-type: gray;
+}
+.text-area, .text-field {
+	-fx-background-color: #2C2D29;
+	-fx-text-fill: #E7E7E7;
+}
+.viewport {
+	-fx-background-color: transparent;
 }

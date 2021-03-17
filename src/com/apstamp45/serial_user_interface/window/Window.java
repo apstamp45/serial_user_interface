@@ -2,6 +2,8 @@ package com.apstamp45.serial_user_interface.window;
 
 import com.apstamp45.serial_user_interface.Main;
 
+import java.util.Scanner;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -16,7 +18,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
 * This class handles the JavaFX window.
@@ -25,9 +29,7 @@ import javafx.stage.Stage;
 */
 public class Window extends Application {
 
-	/** Defines the css file for the window. */
 	public final String CSS_FILE = "./style.css";
-
 	/** The minimum window height. */
 	public final int MIN_HEIGHT = 144;
 
@@ -57,6 +59,9 @@ public class Window extends Application {
 
 	/** Used to select the baud rate. */
 	public static ChoiceBox<String> baudRate;
+
+	/** The window's main scene. */
+	private static Scene mainScene;
 
 	/** Shows the serial data that was sent by the serial device. */
 	public static TextArea serialIn;
@@ -147,7 +152,8 @@ public class Window extends Application {
 		VBox vBox = new VBox(topHbox, serialIn, bottomHBox);
 
 		// Main scene
-		Scene mainScene = new Scene(vBox);
+		mainScene = new Scene(vBox);
+		mainScene.getStylesheets().clear();
 		mainScene.getStylesheets().add(CSS_FILE);
 
 		// Main Stage
