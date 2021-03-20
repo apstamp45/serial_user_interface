@@ -19,6 +19,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -155,6 +156,9 @@ public class Window extends Application {
 		mainScene = new Scene(vBox);
 		mainScene.getStylesheets().clear();
 		mainScene.getStylesheets().add(CSS_FILE);
+
+		// Load font
+		Font f = Font.loadFont("file:resources/DejaVuSansMono.ttf", 11);
 
 		// Main Stage
 		primaryStage.setScene(mainScene);

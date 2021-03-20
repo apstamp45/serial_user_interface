@@ -98,7 +98,7 @@ public class Main {
 		try {
 			String recievedData = serialPort.readString();
 			if (Window.autoScroll) {
-				Window.serialIn.appendText(recievedData + "\n");
+				Window.serialIn.appendText(recievedData);
 			} else {
 				int caretPosition = Window.serialIn.getCaretPosition();
 				Window.serialIn.appendText(recievedData);
